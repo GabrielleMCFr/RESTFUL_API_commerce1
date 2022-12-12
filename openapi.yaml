@@ -1,0 +1,706 @@
+openapi: 3.0.1
+info:
+  title: Kitalpha
+  version: 1.0.0
+  description: E Commerce app
+paths:
+  /register:
+    summary: get all users
+    description: get all users
+    post:
+      summary: create new user
+      description: ''
+      operationId: post_user
+      requestBody:
+        description: A new user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: 201 created
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Add user:
+                  value: 'User added with ID: 1'
+        '404':
+          description: 404 not found
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Add user:
+                  value: Something went wrong.
+        default:
+          description: Default error sample response
+      tags:
+        - Users
+  /user/{user_id}:
+    summary: get a user by their id
+    get:
+      summary: get a single user
+      description: 'get a user by its id '
+      operationId: get_user
+      parameters:
+        - name: user_id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 200 get user
+          content:
+            application/json:
+              examples:
+                Correct Response:
+                  value: |-
+                    [
+                        {
+                            "first_name": "Gab",
+                            "last_name": "MC",
+                            "email": "gab@test.com"
+                        }
+                    ]
+        '401':
+          description: 401 not authorized
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Not authorized:
+                  value: Not authorized.
+        '404':
+          description: 404 not found
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Not authorized:
+                  value: User not found.
+        default:
+          description: Default error sample response
+      tags:
+        - Users
+    put:
+      summary: modify user
+      description: 'modify user data '
+      operationId: put_user
+      parameters:
+        - name: user_id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 200 ressource updated
+          content:
+            application/json:
+              examples:
+                ressource updated:
+                  value:
+                    - first_name: Gaby
+                      last_name: MA
+                      email: gaby@test.com
+        '404':
+          description: 404 not found
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                not found:
+                  value: Something went wrong.
+        default:
+          description: Default error sample response
+      tags:
+        - Users
+    delete:
+      summary: delete user
+      description: ''
+      operationId: delete_user
+      parameters:
+        - name: user_id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 204 deleted
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                ressource deleted:
+                  value: 'User deleted with ID: 1'
+        '404':
+          description: 404 user not deleted
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                '404 ':
+                  value: User not deleted, something went wrong.
+        default:
+          description: Default error sample response
+      tags:
+        - Users
+  /cart:
+    summary: operations on the cart of a user
+    get:
+      summary: get the cart of a user
+      description: ''
+      operationId: get_cart
+      responses:
+        '200':
+          description: 200 get cart
+          content:
+            application/json:
+              examples:
+                get cart:
+                  value: |-
+                    [
+                        {
+                            "cart_id": 18,
+                            "product_id": 3,
+                            "quantity": 3,
+                            "total": "11.97"
+                        },
+                        {
+                            "cart_id": 18,
+                            "product_id": 1,
+                            "quantity": 3,
+                            "total": "14.97"
+                        },
+                        {
+                            "cart_id": 18,
+                            "product_id": 2,
+                            "quantity": 2,
+                            "total": "15.98"
+                        }
+                    ]
+        default:
+          description: Default error sample response
+      tags:
+        - Carts
+  /user/{user_id}/orders:
+    summary: get a list of all the orders of a user
+    get:
+      summary: get a list of all the orders of a user
+      description: ''
+      operationId: get_orders
+      parameters:
+        - name: user_id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: get list of orders
+          content:
+            application/json:
+              examples:
+                get orders:
+                  value: |-
+                    [
+                        {
+                            "id": 5,
+                            "user_id": 25,
+                            "status": "En cours de traitement",
+                            "date_ordered": "2022-11-09T23:00:00.000Z",
+                            "date_expedition": null,
+                            "delivery_address_id": 6,
+                            "invoice_address_id": 5,
+                            "total": "26.94"
+                        },
+                        {
+                            "id": 7,
+                            "user_id": 25,
+                            "status": "En cours de traitement",
+                            "date_ordered": "2022-11-10T23:00:00.000Z",
+                            "date_expedition": null,
+                            "delivery_address_id": 5,
+                            "invoice_address_id": 6,
+                            "total": "37.93"
+                        },
+                        {
+                            "id": 8,
+                            "user_id": 25,
+                            "status": "En cours de traitement",
+                            "date_ordered": "2022-11-10T23:00:00.000Z",
+                            "date_expedition": null,
+                            "delivery_address_id": 5,
+                            "invoice_address_id": 6,
+                            "total": "4.99"
+                        }
+                    ]
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+  /orders/{order_id}:
+    summary: operations on a specific order
+    get:
+      summary: get an order data by its id
+      description: ''
+      operationId: get_order
+      parameters:
+        - name: order_id
+          in: path
+          description: The id of the order.
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+  /products:
+    summary: operations on products
+    get:
+      summary: get all the products or use query string to filter by category
+      description: ''
+      operationId: get_products
+      responses:
+        '200':
+          description: get list of products
+          content:
+            application/json:
+              examples:
+                get list of products:
+                  value: |-
+                    [
+                        {
+                            "id": 1,
+                            "name": "Tartelette",
+                            "description": null,
+                            "composition": null,
+                            "price": "4.99",
+                            "in_stock": 5,
+                            "discount": null,
+                            "categ_id": 1
+                        },
+                        {
+                            "id": 2,
+                            "name": "Macarons",
+                            "description": null,
+                            "composition": null,
+                            "price": "7.99",
+                            "in_stock": 10,
+                            "discount": null,
+                            "categ_id": 1
+                        },
+                        {
+                            "id": 3,
+                            "name": "Cookies de Noel",
+                            "description": null,
+                            "composition": null,
+                            "price": "3.99",
+                            "in_stock": 15,
+                            "discount": null,
+                            "categ_id": 2
+                        }
+                    ]
+        default:
+          description: Default error sample response
+      tags:
+        - Products
+  /products/{product_id}:
+    summary: 'operations on a single product '
+    get:
+      summary: get product by its id
+      description: ''
+      operationId: get_ product
+      parameters:
+        - name: product_id
+          in: path
+          description: The id of the product.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: get a product by its id
+          content:
+            application/json:
+              examples:
+                get product:
+                  value: |-
+                    [
+                        {
+                            "id": 1,
+                            "name": "Tartelette",
+                            "description": null,
+                            "composition": null,
+                            "price": "4.99",
+                            "in_stock": 5,
+                            "discount": null,
+                            "categ_id": 1
+                        }
+                    ]
+        default:
+          description: Default error sample response
+      tags:
+        - Products
+  /cart/checkout:
+    summary: chekout (create a new order from the cart)
+    post:
+      summary: checkout - create new order from the cart
+      description: ''
+      operationId: post_checkout
+      requestBody:
+        description: A new user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        '200':
+          description: 200 order created
+          content:
+            application/json:
+              examples:
+                order ok:
+                  value: Order completed.
+        default:
+          description: Default error sample response
+      tags:
+        - Orders
+  /cart/{product_id}:
+    summary: add an item to the cart
+    post:
+      summary: add item to the cart
+      description: ''
+      operationId: post_cart_item
+      parameters:
+        - name: product_id
+          in: path
+          description: The id of the product.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: A new user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+      responses:
+        '200':
+          description: 200 added
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                add something:
+                  value: Item added OR Quantity upped
+        default:
+          description: Default error sample response
+      tags:
+        - Carts
+    put:
+      summary: modify item in the cart of a user
+      description: ''
+      operationId: put_cart_item
+      parameters:
+        - name: product_id
+          in: path
+          description: The id of the product.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: item updated
+          content:
+            application/json:
+              examples:
+                item added:
+                  value: |-
+                    [
+                        {
+                            "cart_id": 18,
+                            "product_id": 1,
+                            "quantity": 1,
+                            "total": "4.99"
+                        }
+                    ]
+        default:
+          description: Default error sample response
+      tags:
+        - Carts
+    delete:
+      summary: delete an item from the cart of a user
+      description: ''
+      operationId: delete_cart_item
+      parameters:
+        - name: product_id
+          in: path
+          description: The id of the product.
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Carts
+  /user/{user_id}/repertory:
+    summary: operation on the addresses of a user
+    get:
+      summary: get all the addresses of a user
+      description: ''
+      operationId: get_addresses
+      parameters:
+        - name: user_id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: get list of the user's addresses
+          content:
+            application/json:
+              examples:
+                get addresses:
+                  value:
+                    - id: 10
+                      number: '1'
+                      street: Ave whoknows
+                      city: Whatever
+                      code: '12345'
+                      phone: '1234567890'
+                      country: Westeros
+                      user_id: 25
+                      address_id: 10
+                    - id: 11
+                      number: '10'
+                      street: Street unknows
+                      city: Whatever 2
+                      code: '12344'
+                      phone: '1234447890'
+                      country: Essos
+                      user_id: 25
+                      address_id: 11
+        default:
+          description: Default error sample response
+      tags:
+        - Users
+    post:
+      summary: add a new address
+      description: ''
+      operationId: post_address
+      requestBody:
+        description: A new user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Address'
+      parameters:
+        - name: user_id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: address created
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                created:
+                  value: 'Address created with ID: 1'
+        default:
+          description: Default error sample response
+      tags:
+        - Addresses
+  /user/{user_id}/repertory/{address_id}:
+    summary: operations on an address
+    put:
+      summary: modify an address
+      description: ''
+      operationId: put_address
+      parameters:
+        - name: user_id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: string
+        - name: address_id
+          in: path
+          description: The id of the address.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 200 updated
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                success:
+                  value: 'Address updated with ID : 1'
+        default:
+          description: Default error sample response
+      tags:
+        - Addresses
+    delete:
+      summary: delete an address
+      description: ''
+      operationId: delete_address
+      parameters:
+        - name: user_id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: string
+        - name: address_id
+          in: path
+          description: The id of the address.
+          required: true
+          schema:
+            type: string
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - Addresses
+  /login:
+    summary: log in user
+    post:
+      summary: log user in
+      description: ''
+      operationId: post_login
+      requestBody:
+        description: A new user object
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+      responses:
+        '200':
+          description: redirect /
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                redirect:
+                  value: Redirect /
+        default:
+          description: Default error sample response
+  /user/{user_id}/pw:
+    summary: change password
+    put:
+      summary: change password
+      description: ''
+      operationId: put_pw
+      parameters:
+        - name: user_id
+          in: path
+          description: The id of the user.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: password updated
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                updated:
+                  value: Password updated.
+        '404':
+          description: password not updated
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                password not updated:
+                  value: Password not updated
+        default:
+          description: Default error sample response
+      tags:
+        - Users
+  /logout:
+    summary: logout
+    post:
+      summary: log out
+      description: ''
+      operationId: logout
+      responses:
+        default:
+          description: Default error sample response
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+      xml:
+        name: User
+    Product:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        composition:
+          type: string
+        price:
+          type: string
+        in_stock:
+          type: string
+        discount:
+          type: string
+      xml:
+        name: Product
+    Order:
+      type: object
+      properties:
+        user_id:
+          type: string
+        status:
+          type: string
+        delivery_address_id:
+          type: string
+        invoice_address_id:
+          type: string
+      xml:
+        name: Order
+    Address:
+      type: object
+      properties:
+        number:
+          type: string
+        street:
+          type: string
+        code:
+          type: string
+        country:
+          type: string
+        phone:
+          type: string
+      xml:
+        name: Address
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+      xml:
+        name: Address
